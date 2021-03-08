@@ -24,7 +24,6 @@ cc.Class({
     onLoad() {
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getPhysicsManager().gravity = cc.v2(0, G);
-        console.log(G, V, START_POS)
         this.ball = cc.find('Canvas/arrow').getComponent(cc.RigidBody);
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
         this.node.on(cc.Node.EventType.TOUCH_START, this.fireArrow, this);
