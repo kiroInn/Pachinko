@@ -49,10 +49,7 @@ cc.Class({
         const c = a - h / s;
         const delta = b * b - 4 * a * c;
         if (delta >= 0) {
-            // 一元二次方程求根公式
             const t1 = (-b + Math.sqrt(delta)) / (2 * a); // 平抛 tan 值
-            const t2 = (-b - Math.sqrt(delta)) / (2 * a); // 高抛 tan 值
-            // 二、三象限角度要加 180
             const alpha1 = Math.atan(t1) + (s < 0 ? Math.PI : 0);
 
             const v_x_1 = Math.cos(alpha1) * V;
