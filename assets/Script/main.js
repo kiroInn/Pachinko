@@ -20,8 +20,10 @@ cc.Class({
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getPhysicsManager().gravity = cc.v2(0, G);
         this.spring = cc.find('Canvas/spring');
+        this.springBoxCollider = cc.find('Canvas/spring').getComponent(cc.PhysicsBoxCollider);
+        console.log(this.springBoxCollider.size)
         this.ball = cc.find('Canvas/ball').getComponent(cc.RigidBody);
-        cc.director.getPhysicsManager().debugDrawFlags = 1;
+        // cc.director.getPhysicsManager().debugDrawFlags = 1;
         this.node.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
     },
@@ -50,13 +52,16 @@ cc.Class({
         this.schedule(() => {
             if (this.spring.height > 50) {
                 this.spring.height -= 2;
+                this.springBoxCollider.size.height = this.spring.height;
             }
         }, 0.03);
     },
     touchEnd() {
         const V = (100 - this.spring.height) * 20 + 600;
         this.unscheduleAllCallbacks();
+        console.log(this.springBoxCollider.size)
         this.spring.height = 100;
+        this.springBoxCollider.size.height = this.spring.height;
         this.fireArrow(V)
     },
     fireArrow(V) {
