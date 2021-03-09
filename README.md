@@ -7,7 +7,7 @@
     height="80"
     width="80"
     alt="lizard"
-    src="https://raw.githubusercontent.com/kiroInn/pachinko/master/assets/Texture/logo.png"
+    src="https://raw.githubusercontent.com/kiroInn/Pachinko/master/assets/Texture/logo.png"
   />
 </a>
 <br />
@@ -15,7 +15,7 @@
 <p>Pachinko is pinball machine games for children</p>
 <br />
 
-[**Online Preview**][pachinko]
+[**Online Play**][pachinko]
 
 </div>
 <hr />
