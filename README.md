@@ -25,6 +25,6 @@
 [MIT][license]
 
 <!-- prettier-ignore-start -->
-[pachinko]: http://kiroinn.github.io/pachinko
+[pachinko]: http://kiroinn.github.io/pachinko/index.html
 [license]: https://github.com/kiroInn/excel-io/blob/master/LICENSE.MD
 <!-- prettier-ignore-end -->
