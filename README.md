@@ -2,7 +2,7 @@
 <h1>Pachinko</h1>
 
 <br />
-<a href="http://kiroinn.github.io/pachinko">
+<a href="http://kiroinn.github.io/pachinko/index.html">
   <img
     height="80"
     width="80"
