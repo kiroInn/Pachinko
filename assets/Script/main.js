@@ -26,9 +26,20 @@ cc.Class({
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
         this.node.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
+        this.initScrollBar()
     },
     // called every frame
     update(dt) {
+    },
+    initScrollBar() {
+        this.scrollBar = cc.find('Canvas/scrollBar/rolling')
+        console.log(this.scrollBar);
+        this.schedule(() => {
+            if (this.scrollBar.width === 1050) {
+                this.scrollBar.width = 1200;
+            }
+            this.scrollBar.width -= 1;
+        }, 0.03);
     },
     getDelta(V) {
         const location = cc.v2(391, 100);
