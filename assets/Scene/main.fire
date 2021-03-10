@@ -1172,9 +1172,7 @@
     "_fadeTime": 0.6,
     "_minSeg": 1,
     "_stroke": 2,
-    "_texture": {
-      "__uuid__": "a8027877-d8d6-4645-97a0-52d4a0123dba"
-    },
+    "_texture": null,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
