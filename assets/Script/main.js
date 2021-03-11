@@ -23,9 +23,11 @@ cc.Class({
         this.springBoxCollider = cc.find('Canvas/spring').getComponent(cc.PhysicsBoxCollider);
         console.log(this.springBoxCollider.size)
         this.ball = cc.find('Canvas/ball').getComponent(cc.RigidBody);
-        // cc.director.getPhysicsManager().debugDrawFlags = 1;
+        cc.director.getPhysicsManager().debugDrawFlags = 1;
         this.node.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
+        console.log(cc.find('Canvas/land').getComponent(cc.RigidBody))
+        cc.find('Canvas/land').getComponent(cc.RigidBody).applyForceToCenter(cc.v2(77, 77));
         this.initScrollBar()
     },
     // called every frame
@@ -63,16 +65,18 @@ cc.Class({
         this.schedule(() => {
             if (this.spring.height > 50) {
                 this.spring.height -= 2;
-                this.springBoxCollider.size.height = this.spring.height;
+                this.springBoxCollider.offset.y -= 2;
+                this.springBoxCollider.apply();
             }
         }, 0.03);
     },
     touchEnd() {
         const V = (100 - this.spring.height) * 20 + 600;
         this.unscheduleAllCallbacks();
-        console.log(this.springBoxCollider.size)
+        console.log(this.springBoxCollider, this.springBoxCollider.size.height)
         this.spring.height = 100;
-        this.springBoxCollider.size.height = this.spring.height;
+        this.springBoxCollider.offset.y = 50;
+        this.springBoxCollider.apply();
         this.fireArrow(V)
     },
     fireArrow(V) {
