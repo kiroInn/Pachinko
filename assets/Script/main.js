@@ -27,7 +27,10 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
         console.log(cc.find('Canvas/land').getComponent(cc.RigidBody))
-        cc.find('Canvas/land').getComponent(cc.RigidBody).applyForceToCenter(cc.v2(77, 77));
+        // cc.find('Canvas/land').getComponent(cc.RigidBody).applyForceToCenter(1000);
+        console.log('11111', cc.find('Canvas/land').getComponent(cc.RigidBody));
+        cc.find('Canvas/land').getComponent(cc.RigidBody).applyForce(1000, cc.v2(-10, 0));
+        // cc.find('Canvas/land').getComponent(cc.RigidBody).applyLinearImpulse(1000, cc.v2(-10, 0));
         this.initScrollBar()
     },
     // called every frame
@@ -35,11 +38,11 @@ cc.Class({
     },
     initScrollBar() {
         this.scrollBar = cc.find('Canvas/scrollBar/rolling')
-        console.log(this.scrollBar);
         this.schedule(() => {
             if (this.scrollBar.width === 1050) {
                 this.scrollBar.width = 1200;
             }
+            cc.find('Canvas/land').x += 1;
             this.scrollBar.width -= 1;
         }, 0.03);
     },
@@ -73,7 +76,6 @@ cc.Class({
     touchEnd() {
         const V = (100 - this.spring.height) * 20 + 600;
         this.unscheduleAllCallbacks();
-        console.log(this.springBoxCollider, this.springBoxCollider.size.height)
         this.spring.height = 100;
         this.springBoxCollider.offset.y = 50;
         this.springBoxCollider.apply();
@@ -81,6 +83,7 @@ cc.Class({
     },
     fireArrow(V) {
         const linearVelocity = this.getDelta(V);
+        console.log(linearVelocity)
         if (linearVelocity.x) {
             this.ball.node.setPosition(START_POS);
             this.ball.linearVelocity = linearVelocity;
