@@ -19,35 +19,39 @@ cc.Class({
     onLoad() {
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getPhysicsManager().gravity = cc.v2(0, G);
-        this.spring = cc.find('Canvas/spring');
-        this.springBoxCollider = cc.find('Canvas/spring').getComponent(cc.PhysicsBoxCollider);
-        console.log(this.springBoxCollider.size)
-        this.ball = cc.find('Canvas/ball').getComponent(cc.RigidBody);
         cc.director.getPhysicsManager().debugDrawFlags = 1;
-        this.node.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
-        this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
-        console.log(cc.find('Canvas/land').getComponent(cc.RigidBody))
-        // cc.find('Canvas/land').getComponent(cc.RigidBody).applyForceToCenter(1000);
-        console.log('11111', cc.find('Canvas/land').getComponent(cc.RigidBody));
-        cc.find('Canvas/land').getComponent(cc.RigidBody).applyForce(1000, cc.v2(-10, 0));
-        // cc.find('Canvas/land').getComponent(cc.RigidBody).applyLinearImpulse(1000, cc.v2(-10, 0));
-        this.initScrollBar()
+        this.spring = cc.find('Canvas/spring');
+        this.brake = cc.find('Canvas/brake');
+        this.springBoxCollider = cc.find('Canvas/spring').getComponent(cc.PhysicsBoxCollider);
+        this.ball = cc.find('Canvas/ball').getComponent(cc.RigidBody);
+        this.ballContiner = cc.find('Canvas/ballContiner');
+        this.ballContiner.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
+        this.ballContiner.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
+        this.initSchedule()
     },
     // called every frame
     update(dt) {
     },
-    initScrollBar() {
-        this.scrollBar = cc.find('Canvas/scrollBar/rolling')
-        this.schedule(() => {
-            if (this.scrollBar.width === 1050) {
-                this.scrollBar.width = 1200;
+    initSchedule() {
+        this.springSchedule = () => {
+            if (this.spring.height > 40) {
+                this.brake.y += 3;
+                this.brake.getComponent(cc.PhysicsBoxCollider).apply();
+                this.spring.height -= 2;
+                this.springBoxCollider.offset.y -= 2;
+                this.springBoxCollider.apply();
             }
-            cc.find('Canvas/land').x += 1;
-            this.scrollBar.width -= 1;
+        };
+        const scrollBar = cc.find('Canvas/scrollBar/rolling')
+        this.schedule(() => {
+            if (scrollBar.width === 1050) {
+                scrollBar.width = 1200;
+            }
+            scrollBar.width -= 1;
         }, 0.03);
     },
     getDelta(V) {
-        const location = cc.v2(391, 100);
+        const location = cc.v2(391, 400);
         const s = location.x - START_POS.x;
         const h = location.y - START_POS.y;
         const a = G * this.ball.gravityScale * s / (2 * V * V);
@@ -65,25 +69,22 @@ cc.Class({
         }
     },
     touchStart() {
-        this.schedule(() => {
-            if (this.spring.height > 50) {
-                this.spring.height -= 2;
-                this.springBoxCollider.offset.y -= 2;
-                this.springBoxCollider.apply();
-            }
-        }, 0.03);
+        this.schedule(this.springSchedule, 0.03);
     },
     touchEnd() {
         const V = (100 - this.spring.height) * 20 + 600;
-        this.unscheduleAllCallbacks();
-        this.spring.height = 100;
-        this.springBoxCollider.offset.y = 50;
+        this.unschedule(this.springSchedule);
+        this.spring.height = 80;
+        this.springBoxCollider.offset.y = 40;
+        this.brake.y = -178;
+        this.brake.getComponent(cc.PhysicsBoxCollider).apply();
         this.springBoxCollider.apply();
-        this.fireArrow(V)
+        if (this.ball.node.x > 343.375) {
+            this.fireArrow(V)
+        }
     },
     fireArrow(V) {
         const linearVelocity = this.getDelta(V);
-        console.log(linearVelocity)
         if (linearVelocity.x) {
             this.ball.node.setPosition(START_POS);
             this.ball.linearVelocity = linearVelocity;
