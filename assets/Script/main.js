@@ -35,7 +35,7 @@ cc.Class({
     initSchedule() {
         this.springSchedule = () => {
             if (this.spring.height > 40) {
-                this.brake.y += 3;
+                this.brake.y -= 1;
                 this.brake.getComponent(cc.PhysicsBoxCollider).apply();
                 this.spring.height -= 2;
                 this.springBoxCollider.offset.y -= 2;
@@ -76,7 +76,7 @@ cc.Class({
         this.unschedule(this.springSchedule);
         this.spring.height = 80;
         this.springBoxCollider.offset.y = 40;
-        this.brake.y = -178;
+        this.brake.y = -274;
         this.brake.getComponent(cc.PhysicsBoxCollider).apply();
         this.springBoxCollider.apply();
         if (this.ball.node.x > 343.375) {
