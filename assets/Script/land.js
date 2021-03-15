@@ -35,10 +35,7 @@ cc.Class({
     },
 
     onBeginContact(contact, selfCollider, otherCollider) {
-        // console.log('xxxxxx', otherCollider, otherCollider.tag);
         if (otherCollider.tag === 100) {
-            // 碰到弓箭，速度归零
-            // otherCollider.node.getComponent(cc.RigidBody).linearVelocity = cc.Vec2.ZERO;
             otherCollider.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(100, -100);
 
         }

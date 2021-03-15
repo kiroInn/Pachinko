@@ -17,20 +17,35 @@ cc.Class({
     },
     // use this for initialization
     onLoad() {
+        this.scroe = 0;
+        this.probeResult = [];
+        window.Global = {
+            handleProbe: this.handleProbe.bind(this),
+        };
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getPhysicsManager().gravity = cc.v2(0, G);
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
         this.spring = cc.find('Canvas/spring');
         this.brake = cc.find('Canvas/brake');
-        this.springBoxCollider = cc.find('Canvas/spring').getComponent(cc.PhysicsBoxCollider);
-        this.ball = cc.find('Canvas/ball').getComponent(cc.RigidBody);
         this.ballContiner = cc.find('Canvas/ballContiner');
-        this.ballContiner.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
-        this.ballContiner.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
-        this.initSchedule()
+        this.springBoxCollider = this.spring.getComponent(cc.PhysicsBoxCollider);
+        this.ball = cc.find('Canvas/ball').getComponent(cc.RigidBody);
+        this.initTouchable();
+        this.initSchedule();
     },
     // called every frame
     update(dt) {
+    },
+    handleProbe(node) {
+        const isWinning = node.node.getComponent(cc.Sprite).enabled;
+        if (isWinning) {
+            this.scroe += 100;
+            cc.find('Canvas/scroe').getComponent(cc.Label).string = `Score: ${this.scroe}`
+        }
+    },
+    initTouchable() {
+        this.ballContiner.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
+        this.ballContiner.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
     },
     initSchedule() {
         this.springSchedule = () => {
@@ -69,9 +84,9 @@ cc.Class({
         }
     },
     initReward() {
-        const result = _.slice(_.shuffle(_.range(1, 12)), 0, _.random(1, 4));
+        this.probeResult = _.slice(_.shuffle(_.range(1, 12)), 0, _.random(1, 4));
         _.forEach(cc.find('Canvas/gates').children, (gate, index) => {
-            gate.getChildByName('probe').getComponent(cc.Sprite).enabled = _.includes(result, index);
+            gate.getChildByName('probe').getComponent(cc.Sprite).enabled = _.includes(this.probeResult, index);
         })
     },
     touchStart() {

@@ -25,21 +25,13 @@ cc.Class({
         //     }
         // },
     },
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {},
-
     start() {
 
     },
 
     onBeginContact(contact, selfCollider, otherCollider) {
-        // console.log('xxxxxx', otherCollider, otherCollider.tag);
         if (otherCollider.tag === 100) {
-            console.log('probe', contact, selfCollider, otherCollider);
+            Global.handleProbe(selfCollider)
         }
     }
-
-    // update (dt) {},
 });
