@@ -1,4 +1,4 @@
-
+var _ = require('lodash');
 // 重力
 const G = -1024;
 // 固定速度
@@ -19,7 +19,7 @@ cc.Class({
     onLoad() {
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getPhysicsManager().gravity = cc.v2(0, G);
-        cc.director.getPhysicsManager().debugDrawFlags = 1;
+        // cc.director.getPhysicsManager().debugDrawFlags = 1;
         this.spring = cc.find('Canvas/spring');
         this.brake = cc.find('Canvas/brake');
         this.springBoxCollider = cc.find('Canvas/spring').getComponent(cc.PhysicsBoxCollider);
