@@ -68,7 +68,14 @@ cc.Class({
             return cc.v2(0, 0);
         }
     },
+    initReward() {
+        const result = _.slice(_.shuffle(_.range(1, 12)), 0, _.random(1, 4));
+        _.forEach(cc.find('Canvas/gates').children, (gate, index) => {
+            gate.getChildByName('probe').getComponent(cc.Sprite).enabled = _.includes(result, index);
+        })
+    },
     touchStart() {
+        this.initReward();
         this.schedule(this.springSchedule, 0.03);
     },
     touchEnd() {
