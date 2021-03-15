@@ -395,7 +395,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "scroe",
+    "_name": "score",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2

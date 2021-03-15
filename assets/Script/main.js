@@ -17,7 +17,7 @@ cc.Class({
     },
     // use this for initialization
     onLoad() {
-        this.scroe = 0;
+        this.score = 0;
         this.probeResult = [];
         window.Global = {
             handleProbe: this.handleProbe.bind(this),
@@ -39,8 +39,8 @@ cc.Class({
     handleProbe(node) {
         const isWinning = node.node.getComponent(cc.Sprite).enabled;
         if (isWinning) {
-            this.scroe += 100;
-            cc.find('Canvas/scroe').getComponent(cc.Label).string = `Score: ${this.scroe}`
+            this.score += 100;
+            cc.find('Canvas/score').getComponent(cc.Label).string = `Score: ${this.score}`
         }
     },
     initTouchable() {
