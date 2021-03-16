@@ -50,7 +50,7 @@ cc.Class({
             if (stars.angle <= -360) {
                 stars.angle = 0;
             }
-            stars.angle -= 0.01;
+            stars.angle -= 0.003;
         }, 0.03);
     },
     initTouchable() {
