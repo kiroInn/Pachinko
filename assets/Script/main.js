@@ -32,6 +32,7 @@ cc.Class({
         this.ball = cc.find('Canvas/ball').getComponent(cc.RigidBody);
         this.initTouchable();
         this.initSchedule();
+        this.initStarsSpin();
     },
     // called every frame
     update(dt) {
@@ -42,6 +43,12 @@ cc.Class({
             this.score += 100;
             cc.find('Canvas/score').getComponent(cc.Label).string = `Score: ${this.score}`
         }
+    },
+    initStarsSpin() {
+        const stars = cc.find('Canvas/stars')
+        this.schedule(() => {
+            stars.angle += 0.01;
+        }, 0.03);
     },
     initTouchable() {
         this.ballContiner.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
