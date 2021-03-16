@@ -47,7 +47,10 @@ cc.Class({
     initStarsSpin() {
         const stars = cc.find('Canvas/stars')
         this.schedule(() => {
-            stars.angle += 0.01;
+            if (stars.angle <= -360) {
+                stars.angle = 0;
+            }
+            stars.angle -= 0.01;
         }, 0.03);
     },
     initTouchable() {
@@ -66,8 +69,8 @@ cc.Class({
         };
         const scrollBar = cc.find('Canvas/scrollBar/rolling')
         this.schedule(() => {
-            if (scrollBar.width === 1050) {
-                scrollBar.width = 1200;
+            if (scrollBar.width === 1093) {
+                scrollBar.width = 1177;
             }
             scrollBar.width -= 1;
         }, 0.03);
