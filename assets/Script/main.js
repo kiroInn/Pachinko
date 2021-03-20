@@ -1,12 +1,15 @@
 var _ = require('lodash');
 // 重力
-const Gravity = -1024;
+const Gravity = -624;
 
 // 固定速度
 // const V = 1000;
 
 // 开始位置
 const START_POS = cc.v2(392, -125);
+
+// 星球排名
+const STAR_RANKING = ['mercury', 'venus', 'earth', 'moon', 'mars', 'jupiter', 'uranus', 'neptune', 'pluto'];
 
 cc.Class({
     extends: cc.Component,
@@ -33,16 +36,24 @@ cc.Class({
         this.initTouchable();
         this.initSchedule();
         this.initStarsSpin();
+        this.updateStar();
     },
     handleProbe(node) {
         const isWinning = node.node.getComponent(cc.Sprite).enabled;
         if (isWinning) {
             this.score += 100;
             cc.find('Canvas/score').getComponent(cc.Label).string = `Score: ${this.score}`
+            this.updateStar();
         }
     },
     initStarsSpin() {
         const stars = cc.find('Canvas/stars')
+        const pins = cc.find('Canvas/pins')
+        _.forEach(pins.children, pin => {
+            console.log('pin', pin, pin.getComponent(cc.PhysicsBoxCollider))
+            pin.x += 10;
+            // pin.getComponent(cc.PhysicsBoxCollider).apply()
+        })
         this.schedule(() => {
             if (stars.angle <= -360) {
                 stars.angle = 0;
@@ -90,6 +101,16 @@ cc.Class({
             return cc.v2(0, 0);
         }
     },
+    updateStar() {
+        const index = Math.min(Math.floor(this.score / 100), STAR_RANKING.length);
+        console.log('STAR_RANKING[index]', STAR_RANKING[index]);
+        cc.loader.loadRes(`ball/${STAR_RANKING[index]}`, cc.SpriteFrame, function (err, spriteFrame) {
+            if (err) {
+                console.log(err);
+            }
+            cc.find('Canvas/ball').getComponent(cc.Sprite).spriteFrame = spriteFrame;
+        });
+    },
     initReward() {
         this.probeResult = _.slice(_.shuffle(_.range(1, 12)), 0, _.random(1, 4));
         _.forEach(cc.find('Canvas/gates').children, (gate, index) => {
@@ -101,14 +122,15 @@ cc.Class({
         this.schedule(this.springSchedule, 0.03);
     },
     touchEnd() {
-        const V = (100 - this.spring.height) * 20 + 600;
+        const V = (100 - this.spring.height) * 25 + 600;
         this.unschedule(this.springSchedule);
         this.spring.height = 80;
         this.springBoxCollider.offset.y = 40;
         this.brake.y = -274;
         this.brake.getComponent(cc.PhysicsBoxCollider).apply();
         this.springBoxCollider.apply();
-        if (this.ball.node.x > 343.375) {
+        console.log(this.ball.node.y)
+        if (this.ball.node.x > 343.375 && this.ball.node.y < -226) {
             this.fireArrow(V)
         }
     },
