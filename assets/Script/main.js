@@ -31,7 +31,7 @@ cc.Class({
         this.spring = cc.find('Canvas/spring');
         this.brake = cc.find('Canvas/brake');
         this.ballContiner = cc.find('Canvas/ballContiner');
-        this.springBoxCollider = this.spring.getComponent(cc.PhysicsBoxCollider);
+        this.springBoxCollider = this.spring.getComponent(cc.PhysicsPolygonCollider);
         this.ball = cc.find('Canvas/ball').getComponent(cc.RigidBody);
         this.initTouchable();
         this.initSchedule();
@@ -42,13 +42,15 @@ cc.Class({
         const isWinning = node.node.getComponent(cc.Sprite).enabled;
         if (isWinning) {
             this.score += 100;
-            cc.find('Canvas/score').getComponent(cc.Label).string = `Score: ${this.score}`
+            cc.find('Canvas/score').getComponent(cc.Label).string = `score: ${this.score}`
             this.updateStar();
         }
     },
     initStarsSpin() {
         const stars = cc.find('Canvas/stars')
+        const comets = cc.find('Canvas/comets')
         const pins = cc.find('Canvas/pins')
+        const ground = cc.find('Canvas/ground')
         _.forEach(pins.children, pin => {
             console.log('pin', pin, pin.getComponent(cc.PhysicsBoxCollider))
             pin.x += 10;
@@ -57,8 +59,12 @@ cc.Class({
         this.schedule(() => {
             if (stars.angle <= -360) {
                 stars.angle = 0;
+                comets.angle = 0;
+                ground.angle = 0;
             }
             stars.angle -= 0.003;
+            comets.angle -= 0.05;
+            ground.angle -= 0.01;
         }, 0.03);
     },
     initTouchable() {
@@ -77,8 +83,8 @@ cc.Class({
         };
         const scrollBar = cc.find('Canvas/scrollBar/rolling')
         this.schedule(() => {
-            if (scrollBar.width === 1093) {
-                scrollBar.width = 1177;
+            if (scrollBar.width === 1055) {
+                scrollBar.width = 1116;
             }
             scrollBar.width -= 1;
         }, 0.03);
@@ -103,7 +109,7 @@ cc.Class({
     },
     updateStar() {
         const index = Math.min(Math.floor(this.score / 100), STAR_RANKING.length);
-        console.log('STAR_RANKING[index]', STAR_RANKING[index]);
+        cc.find('Canvas/score/title').getComponent(cc.Label).string = STAR_RANKING[index];
         cc.loader.loadRes(`ball/${STAR_RANKING[index]}`, cc.SpriteFrame, function (err, spriteFrame) {
             if (err) {
                 console.log(err);

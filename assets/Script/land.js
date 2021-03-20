@@ -36,7 +36,7 @@ cc.Class({
 
     onBeginContact(contact, selfCollider, otherCollider) {
         if (otherCollider.tag === 100) {
-            otherCollider.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(100, -100);
+            otherCollider.node.getComponent(cc.RigidBody).linearVelocity = cc.v2(200, -100);
 
         }
     }
