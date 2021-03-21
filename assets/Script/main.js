@@ -51,11 +51,7 @@ cc.Class({
         const comets = cc.find('Canvas/comets')
         const pins = cc.find('Canvas/pins')
         const ground = cc.find('Canvas/ground')
-        _.forEach(pins.children, pin => {
-            console.log('pin', pin, pin.getComponent(cc.PhysicsBoxCollider))
-            pin.x += 10;
-            // pin.getComponent(cc.PhysicsBoxCollider).apply()
-        })
+
         this.schedule(() => {
             if (stars.angle <= -360) {
                 stars.angle = 0;
@@ -65,6 +61,11 @@ cc.Class({
             stars.angle -= 0.003;
             comets.angle -= 0.05;
             ground.angle -= 0.01;
+
+            pins.angle += 0.05;
+            _.forEach(pins.children, pin => {
+                pin.getComponent(cc.PhysicsCircleCollider).apply()
+            })
         }, 0.03);
     },
     initTouchable() {
@@ -90,7 +91,7 @@ cc.Class({
         }, 0.03);
     },
     getDelta(velocity) {
-        const location = cc.v2(391, 400);
+        const location = cc.v2(461, 400);
         const s = location.x - START_POS.x;
         const h = location.y - START_POS.y;
         const a = Gravity * this.ball.gravityScale * s / (2 * velocity * velocity);
@@ -108,7 +109,7 @@ cc.Class({
         }
     },
     updateStar() {
-        const index = Math.min(Math.floor(this.score / 100), STAR_RANKING.length);
+        const index = Math.min(Math.floor(this.score / 100), STAR_RANKING.length - 1);
         cc.find('Canvas/score/title').getComponent(cc.Label).string = STAR_RANKING[index];
         cc.loader.loadRes(`ball/${STAR_RANKING[index]}`, cc.SpriteFrame, function (err, spriteFrame) {
             if (err) {
@@ -135,8 +136,8 @@ cc.Class({
         this.brake.y = -274;
         this.brake.getComponent(cc.PhysicsBoxCollider).apply();
         this.springBoxCollider.apply();
-        console.log(this.ball.node.y)
-        if (this.ball.node.x > 343.375 && this.ball.node.y < -226) {
+        const isLaunchArea = this.ball.node.x > 343.375 && this.ball.node.y < -226;
+        if (isLaunchArea) {
             this.fireArrow(V)
         }
     },

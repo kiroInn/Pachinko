@@ -1,5 +1,5 @@
 <div align="center">
-<h1>Pachinko</h1>
+<h2>Pachinko</h2>
 
 <br />
 <a href="http://kiroinn.github.io/pachinko/index.html">
