@@ -7,7 +7,7 @@
     height="80"
     width="80"
     alt="lizard"
-    src="https://raw.githubusercontent.com/kiroInn/Pachinko/master/assets/Texture/logo.png"
+    src="https://raw.githubusercontent.com/kiroInn/Pachinko/master/assets/resources/logo.png"
   />
 </a>
 <br />
