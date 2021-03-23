@@ -62,9 +62,12 @@ cc.Class({
             comets.angle -= 0.05;
             ground.angle -= 0.01;
 
-            pins.angle += 0.05;
+            pins.angle -= 0.05
             _.forEach(pins.children, pin => {
-                pin.getComponent(cc.PhysicsCircleCollider).apply()
+                if (pin.angle <= -360) {
+                    pin.angle = 0;
+                }
+                pin.getComponent(cc.RigidBody).syncPosition(true)
             })
         }, 0.03);
     },
