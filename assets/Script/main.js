@@ -33,6 +33,8 @@ cc.Class({
     onLoad() {
         this.score = 0;
         this.probeResult = [];
+        this.isSpringIncrease = false;
+
         window.Global = {
             handleProbe: this.handleProbe.bind(this),
         };
@@ -88,13 +90,25 @@ cc.Class({
     },
     initSchedule() {
         this.springSchedule = () => {
-            if (this.spring.height > 40) {
-                this.brake.y -= 1;
-                this.brake.getComponent(cc.PhysicsBoxCollider).apply();
-                this.spring.height -= 2;
-                this.springBoxCollider.offset.y -= 2;
-                this.springBoxCollider.apply();
+            console.log('this.isSpringIncrease', this.spring.isSpringIncrease)
+
+            if (this.spring.height <= 40) {
+                this.spring.isSpringIncrease = true
             }
+            if (this.spring.height >= 80) {
+                this.spring.isSpringIncrease = false
+            }
+            if (this.spring.isSpringIncrease) {
+                this.brake.y += 0.75;
+                this.spring.height += 1.5;
+                this.springBoxCollider.offset.y += 1.5;
+            } else {
+                this.brake.y -= 0.75;
+                this.spring.height -= 1.5;
+                this.springBoxCollider.offset.y -= 1.5;
+            }
+            this.brake.getComponent(cc.PhysicsBoxCollider).apply();
+            this.springBoxCollider.apply();
         };
         const scrollBar = cc.find('Canvas/scrollBar/rolling')
         this.schedule(() => {
