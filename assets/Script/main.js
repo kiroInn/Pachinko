@@ -10,6 +10,17 @@ const START_POS = cc.v2(392, -125);
 
 // 星球排名
 const STAR_RANKING = ['mercury', 'venus', 'earth', 'moon', 'mars', 'jupiter', 'uranus', 'neptune', 'pluto'];
+const STAR_RANKING_MAP = {
+    mercury: '水星',
+    venus: '金星',
+    earth: '地球',
+    moon: '月球',
+    mars: '火星',
+    jupiter: '木星',
+    uranus: '天王星',
+    neptune: '海王星',
+    pluto: '冥王星'
+}
 
 cc.Class({
     extends: cc.Component,
@@ -113,7 +124,7 @@ cc.Class({
     },
     updateStar() {
         const index = Math.min(Math.floor(this.score / 100), STAR_RANKING.length - 1);
-        cc.find('Canvas/score/title').getComponent(cc.Label).string = STAR_RANKING[index];
+        cc.find('Canvas/score/title').getComponent(cc.Label).string = STAR_RANKING_MAP[STAR_RANKING[index].toLowerCase()];
         cc.loader.loadRes(`ball/${STAR_RANKING[index]}`, cc.SpriteFrame, function (err, spriteFrame) {
             if (err) {
                 console.log(err);
