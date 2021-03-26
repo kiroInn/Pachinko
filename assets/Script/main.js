@@ -41,6 +41,7 @@ cc.Class({
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getPhysicsManager().gravity = cc.v2(0, Gravity);
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
+
         this.spring = cc.find('Canvas/spring');
         this.brake = cc.find('Canvas/brake');
         this.ballContiner = cc.find('Canvas/ballContiner');
@@ -62,7 +63,8 @@ cc.Class({
     initStarsSpin() {
         const stars = cc.find('Canvas/stars')
         const comets = cc.find('Canvas/comets')
-        const pins = cc.find('Canvas/pins')
+        const pins1 = cc.find('Canvas/pins/rotate1')
+        const pins2 = cc.find('Canvas/pins/rotate2')
         const ground = cc.find('Canvas/ground')
 
         this.schedule(() => {
@@ -75,9 +77,16 @@ cc.Class({
             comets.angle -= 0.05;
             ground.angle -= 0.01;
 
-            pins.angle -= 0.05
-            _.forEach(pins.children, pin => {
+            pins1.angle -= 0.05
+            pins2.angle += 0.05
+            _.forEach(pins1.children, pin => {
                 if (pin.angle <= -360) {
+                    pin.angle = 0;
+                }
+                pin.getComponent(cc.RigidBody).syncPosition(true)
+            })
+            _.forEach(pins2.children, pin => {
+                if (pin.angle <= 360) {
                     pin.angle = 0;
                 }
                 pin.getComponent(cc.RigidBody).syncPosition(true)
