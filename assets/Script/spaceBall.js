@@ -41,12 +41,11 @@ cc.Class({
         cc.director.getPhysicsManager().enabled = true;
         cc.director.getPhysicsManager().gravity = cc.v2(0, Gravity);
         // cc.director.getPhysicsManager().debugDrawFlags = 1;
-
-        this.spring = cc.find('spaceBall/spring');
-        this.brake = cc.find('spaceBall/brake');
-        this.ballContiner = cc.find('spaceBall/ballContiner');
+        this.spring = this.node.getChildByName('spring');
+        this.brake = this.node.getChildByName('brake');
+        this.ballContiner = this.node.getChildByName('ballContiner');
         this.springBoxCollider = this.spring.getComponent(cc.PhysicsPolygonCollider);
-        this.ball = cc.find('spaceBall/ball').getComponent(cc.RigidBody);
+        this.ball = this.node.getChildByName('ball').getComponent(cc.RigidBody);
         this.initTouchable();
         this.initSchedule();
         this.initStarsSpin();
@@ -56,16 +55,16 @@ cc.Class({
         const isWinning = node.node.getComponent(cc.Sprite).enabled;
         if (isWinning) {
             this.score += 100;
-            cc.find('spaceBall/score').getComponent(cc.Label).string = `score: ${this.score}`
+            this.node.getChildByName('score').getComponent(cc.Label).string = `score: ${this.score}`
             this.updateStar();
         }
     },
     initStarsSpin() {
-        const stars = cc.find('spaceBall/stars')
-        const comets = cc.find('spaceBall/comets')
-        const pins1 = cc.find('spaceBall/pins/rotate1')
-        const pins2 = cc.find('spaceBall/pins/rotate2')
-        const ground = cc.find('spaceBall/ground')
+        const stars = this.node.getChildByName('stars')
+        const comets = this.node.getChildByName('comets')
+        const pins1 = this.node.getChildByName('pins').getChildByName('rotate1')
+        const pins2 = this.node.getChildByName('pins').getChildByName('rotate2')
+        const ground = this.node.getChildByName('ground')
 
         this.schedule(() => {
             if (stars.angle <= -360) {
@@ -119,7 +118,7 @@ cc.Class({
             this.brake.getComponent(cc.PhysicsBoxCollider).apply();
             this.springBoxCollider.apply();
         };
-        const scrollBar = cc.find('spaceBall/scrollBar/rolling')
+        const scrollBar = this.node.getChildByName('scrollBar').getChildByName('rolling')
         this.schedule(() => {
             if (scrollBar.width === 1055) {
                 scrollBar.width = 1116;
@@ -147,17 +146,17 @@ cc.Class({
     },
     updateStar() {
         const index = Math.min(Math.floor(this.score / 100), STAR_RANKING.length - 1);
-        // cc.find('spaceBall/score/title').getComponent(cc.Label).string = STAR_RANKING_MAP[STAR_RANKING[index].toLowerCase()];
-        cc.loader.loadRes(`ball/${STAR_RANKING[index]}`, cc.SpriteFrame, function (err, spriteFrame) {
+        // this.node.getChildByName('score/title').getComponent(cc.Label).string = STAR_RANKING_MAP[STAR_RANKING[index].toLowerCase()];
+        cc.loader.loadRes(`ball/${STAR_RANKING[index]}`, cc.SpriteFrame, (err, spriteFrame) => {
             if (err) {
                 console.log(err);
             }
-            cc.find('spaceBall/ball').getComponent(cc.Sprite).spriteFrame = spriteFrame;
+            this.node.getChildByName('ball').getComponent(cc.Sprite).spriteFrame = spriteFrame;
         });
     },
     initReward() {
         this.probeResult = _.slice(_.shuffle(_.range(1, 12)), 0, _.random(1, 4));
-        _.forEach(cc.find('spaceBall/gates').children, (gate, index) => {
+        _.forEach(this.node.getChildByName('gates').children, (gate, index) => {
             gate.getChildByName('probe').getComponent(cc.Sprite).enabled = _.includes(this.probeResult, index);
         })
     },
