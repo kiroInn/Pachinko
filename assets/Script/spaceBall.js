@@ -98,7 +98,6 @@ cc.Class({
     },
     initSchedule() {
         this.springSchedule = () => {
-            console.log('this.isSpringIncrease', this.spring.isSpringIncrease)
 
             if (this.spring.height <= 40) {
                 this.spring.isSpringIncrease = true
@@ -146,7 +145,7 @@ cc.Class({
     },
     updateStar() {
         const index = Math.min(Math.floor(this.score / 100), STAR_RANKING.length - 1);
-        // this.node.getChildByName('score/title').getComponent(cc.Label).string = STAR_RANKING_MAP[STAR_RANKING[index].toLowerCase()];
+        this.node.getChildByName('score').getChildByName('title').getComponent(cc.Label).string = STAR_RANKING_MAP[STAR_RANKING[index].toLowerCase()];
         cc.loader.loadRes(`ball/${STAR_RANKING[index]}`, cc.SpriteFrame, (err, spriteFrame) => {
             if (err) {
                 console.log(err);
