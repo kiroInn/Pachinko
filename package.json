@@ -1,0 +1,22 @@
+{
+  "name": "pachinko",
+  "version": "1.0.0",
+  "description": "<div align=\"center\"> <h2>Pachinko</h2>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiroInn/Pachinko.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kiroInn/Pachinko/issues"
+  },
+  "homepage": "https://github.com/kiroInn/Pachinko#readme",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
