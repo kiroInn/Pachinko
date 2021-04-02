@@ -1,13 +1,10 @@
 var _ = require('lodash');
 // 重力
 const Gravity = -624;
-
 // 固定速度
 // const V = 1000;
-
 // 开始位置
 const START_POS = cc.v2(392, -125);
-
 // 星球排名
 const STAR_RANKING = ['mercury', 'venus', 'earth', 'moon', 'mars', 'jupiter', 'uranus', 'neptune', 'pluto'];
 const STAR_RANKING_MAP = {
@@ -50,6 +47,7 @@ cc.Class({
         this.initSchedule();
         this.initStarsSpin();
         this.updateStar();
+        this.randomReward();
     },
     handleProbe(node) {
         const isWinning = node.node.getComponent(cc.Sprite).enabled;
@@ -152,6 +150,19 @@ cc.Class({
             }
             this.node.getChildByName('ball').getComponent(cc.Sprite).spriteFrame = spriteFrame;
         });
+    },
+    randomReward() {
+        let currentIndex = 0;
+        this.schedule(() => {
+            const gates = this.node.getChildByName('gates').children;
+            _.forEach(gates, (gate, index) => {
+                if (index === gates.length - 1) { return; }
+                const isSame = currentIndex === index;
+                gate.getChildByName('probe').getComponent(cc.Sprite).enabled = isSame;
+            })
+            currentIndex >= gates.length ? currentIndex = 0 : currentIndex++
+            if (currentIndex === gates.length - 1) currentIndex = 0;
+        }, 0.3);
     },
     initReward() {
         this.probeResult = _.slice(_.shuffle(_.range(1, 12)), 0, _.random(1, 4));
