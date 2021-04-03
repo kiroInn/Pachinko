@@ -47,15 +47,16 @@ cc.Class({
         this.initSchedule();
         this.initStarsSpin();
         this.updateStar();
-        this.randomReward();
     },
     handleProbe(node) {
         const isWinning = node.node.getComponent(cc.Sprite).enabled;
         if (isWinning) {
+            console.log('congratulation!!!')
             this.score += 100;
             this.node.getChildByName('score').getComponent(cc.Label).string = `score: ${this.score}`
             this.updateStar();
         }
+        this.schedule(this.randomRewardSchedule, 0.3);
     },
     initStarsSpin() {
         const stars = this.node.getChildByName('stars')
@@ -95,6 +96,17 @@ cc.Class({
         this.ballContiner.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
     },
     initSchedule() {
+        this.randomRewardIndex = 0;
+        this.randomRewardSchedule = () => {
+            const gates = this.node.getChildByName('gates').children;
+            _.forEach(gates, (gate, index) => {
+                if (index === gates.length - 1) { return; }
+                const isSame = this.randomRewardIndex === index;
+                gate.getChildByName('probe').getComponent(cc.Sprite).enabled = isSame;
+            })
+            this.randomRewardIndex >= gates.length ? this.randomRewardIndex = 0 : this.randomRewardIndex++
+            if (this.randomRewardIndex === gates.length - 1) this.randomRewardIndex = 0;
+        }
         this.springSchedule = () => {
 
             if (this.spring.height <= 40) {
@@ -151,19 +163,6 @@ cc.Class({
             this.node.getChildByName('ball').getComponent(cc.Sprite).spriteFrame = spriteFrame;
         });
     },
-    randomReward() {
-        let currentIndex = 0;
-        this.schedule(() => {
-            const gates = this.node.getChildByName('gates').children;
-            _.forEach(gates, (gate, index) => {
-                if (index === gates.length - 1) { return; }
-                const isSame = currentIndex === index;
-                gate.getChildByName('probe').getComponent(cc.Sprite).enabled = isSame;
-            })
-            currentIndex >= gates.length ? currentIndex = 0 : currentIndex++
-            if (currentIndex === gates.length - 1) currentIndex = 0;
-        }, 0.3);
-    },
     initReward() {
         this.probeResult = _.slice(_.shuffle(_.range(1, 12)), 0, _.random(1, 4));
         _.forEach(this.node.getChildByName('gates').children, (gate, index) => {
@@ -173,6 +172,7 @@ cc.Class({
     touchStart() {
         this.initReward();
         this.schedule(this.springSchedule, 0.03);
+        this.unschedule(this.randomRewardSchedule);
     },
     touchEnd() {
         const V = (100 - this.spring.height) * 25 + 600;
@@ -189,6 +189,7 @@ cc.Class({
     },
     fireArrow(V) {
         const linearVelocity = this.getDelta(V);
+        console.log('linearVelocity', linearVelocity.x, linearVelocity.y)
         if (linearVelocity.x) {
             this.ball.node.setPosition(START_POS);
             this.ball.linearVelocity = linearVelocity;
