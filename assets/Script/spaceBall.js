@@ -190,6 +190,7 @@ cc.Class({
     fireArrow(V) {
         const linearVelocity = this.getDelta(V);
         console.log('linearVelocity', linearVelocity.x, linearVelocity.y)
+        linearVelocity.y = 100;
         if (linearVelocity.x) {
             this.ball.node.setPosition(START_POS);
             this.ball.linearVelocity = linearVelocity;
