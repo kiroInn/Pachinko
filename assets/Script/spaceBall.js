@@ -175,7 +175,8 @@ cc.Class({
         this.unschedule(this.randomRewardSchedule);
     },
     touchEnd() {
-        const V = (100 - this.spring.height) * 25 + 600;
+        const V = (80 - this.spring.height) * 22.5 + 900;
+
         this.unschedule(this.springSchedule);
         this.spring.height = 80;
         this.springBoxCollider.offset.y = 40;
@@ -189,8 +190,6 @@ cc.Class({
     },
     fireArrow(V) {
         const linearVelocity = this.getDelta(V);
-        console.log('linearVelocity', linearVelocity.x, linearVelocity.y)
-        linearVelocity.y = 100;
         if (linearVelocity.x) {
             this.ball.node.setPosition(START_POS);
             this.ball.linearVelocity = linearVelocity;
